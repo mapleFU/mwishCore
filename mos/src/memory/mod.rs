@@ -1,3 +1,4 @@
+mod address;
 pub mod config;
 pub mod heap;
 

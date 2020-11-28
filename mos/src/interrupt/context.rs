@@ -4,11 +4,10 @@ use riscv::register::sstatus::Sstatus;
 #[repr(C)]
 #[derive(Debug)]
 pub struct Context {
-    pub x: [usize; 32],     // 32 个通用寄存器
+    pub x: [usize; 32], // 32 个通用寄存器
     pub sstatus: Sstatus,
-    pub sepc: usize
+    pub sepc: usize,
 }
-
 
 /// 创建一个用 0 初始化的 Context
 ///

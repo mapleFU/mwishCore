@@ -33,6 +33,9 @@ mod sbi;
 // TODO(mwish): 为什么 std::alloc 就不用，crate alloc 就需要呢。
 extern crate alloc;
 
+#[macro_use]
+extern crate lazy_static;
+
 mod interrupt;
 mod memory;
 
@@ -64,6 +67,9 @@ pub extern "C" fn rust_main() -> ! {
         assert_eq!(value, i);
     }
     println!("heap test passed");
+
+    // 注意这里的 KERNEL_END_ADDRESS 为 ref 类型，需要加 *
+    println!("{}", *memory::config::KERNEL_END_ADDRESS);
 
     panic!()
 }
