@@ -71,5 +71,19 @@ pub extern "C" fn rust_main() -> ! {
     // 注意这里的 KERNEL_END_ADDRESS 为 ref 类型，需要加 *
     println!("{}", *memory::config::KERNEL_END_ADDRESS);
 
+    // 物理页分配
+    // 我们可以看到 frame_0 和 frame_1 会被自动析构然后回收，第二次又分配同样的地址。
+    for _ in 0..2 {
+        let frame_0 = match memory::frame::FRAME_ALLOCATOR.lock().alloc() {
+            Result::Ok(frame_tracker) => frame_tracker,
+            Result::Err(err) => panic!("{}", err),
+        };
+        let frame_1 = match memory::frame::FRAME_ALLOCATOR.lock().alloc() {
+            Result::Ok(frame_tracker) => frame_tracker,
+            Result::Err(err) => panic!("{}", err),
+        };
+        println!("{} and {}", frame_0.address(), frame_1.address());
+    }
+
     panic!()
 }

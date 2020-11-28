@@ -1,3 +1,5 @@
+//! 虽然加上这段之后我们的代码就可以运行 `Vec` 之类的了，但是实际上这个在 `.bss` 段分配的内存，
+//! 然后并不是用户用的 memory. 所以还需要给用户的 alloc 提供对应的接口。
 use super::KERNEL_HEAP_SIZE;
 
 use buddy_system_allocator::LockedHeap;
