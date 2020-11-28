@@ -1,7 +1,7 @@
 use super::context::Context;
 use super::timer;
+use riscv::register::scause::{Exception, Interrupt, Scause, Trap};
 use riscv::register::stvec;
-use riscv::register::scause::{Scause, Exception, Trap, Interrupt};
 
 global_asm!(include_str!("./interrupt.asm"));
 
@@ -37,7 +37,7 @@ pub fn handle_interrupt(context: &mut Context, scause: Scause, stval: usize) {
 }
 
 /// 处理 ebreak 断点
-/// 
+///
 /// 继续执行，其中 `sepc` 增加 2 字节，以跳过当前这条 `ebreak` 指令
 fn breakpoint(context: &mut Context) {
     println!("Breakpoint at 0x{:x}", context.sepc);
@@ -45,7 +45,7 @@ fn breakpoint(context: &mut Context) {
 }
 
 /// 处理时钟中断
-/// 
+///
 /// 目前只会在 [`timer`] 模块中进行计数
 fn supervisor_timer(_: &Context) {
     timer::tick();
