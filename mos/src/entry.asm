@@ -4,6 +4,7 @@
 # 它将会执行一些必要操作，然后跳转至我们用 rust 编写的入口函数
 #
 # 关于 RISC-V 下的汇编语言，可以参考 https://github.com/riscv/riscv-asm-manual/blob/master/riscv-asm.md
+# %hi 表示取 [12,32) 位，%lo 表示取 [0,12) 位
 
     .section .text.entry
     .globl _start
@@ -22,3 +23,16 @@ boot_stack:
     .global boot_stack_top
 boot_stack_top:
     # 栈结尾
+
+    # 初始内核映射所用的页表
+    .section .data
+    .align 12
+boot_page_table:
+    .quad 0
+    .quad 0
+    # 第 2 项：0x8000_0000 -> 0x8000_0000，0xcf 表示 VRWXAD 均为 1
+    .quad (0x80000 << 10) | 0xcf
+    .zero 507 * 8
+    # 第 510 项：0xffff_ffff_8000_0000 -> 0x8000_0000，0xcf 表示 VRWXAD 均为 1
+    .quad (0x80000 << 10) | 0xcf
+    .quad 0

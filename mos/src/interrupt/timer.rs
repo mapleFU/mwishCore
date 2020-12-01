@@ -3,7 +3,6 @@
 use crate::sbi::set_timer;
 use riscv::register::{sie, sstatus, time};
 
-
 /// 时钟中断的间隔，单位是 CPU 指令
 static INTERVAL: usize = 100000;
 /// 触发时钟中断计数
@@ -35,11 +34,10 @@ fn set_next_timeout() {
 pub fn init() {
     unsafe {
         // 开启 STIE，允许时钟中断
-        sie::set_stimer(); 
+        sie::set_stimer();
         // 开启 SIE（不是 sie 寄存器），允许内核态被中断打断
         sstatus::set_sie();
     }
     // 设置下一次时钟中断
     set_next_timeout();
 }
-

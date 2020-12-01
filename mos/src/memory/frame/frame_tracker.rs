@@ -1,3 +1,4 @@
+use crate::memory::PAGE_SIZE;
 use super::super::address::{PhysicalAddress, PhysicalPageNumber};
 use super::frame_allocator::FRAME_ALLOCATOR;
 
@@ -18,6 +19,8 @@ use super::frame_allocator::FRAME_ALLOCATOR;
 ///
 /// 使用 `Tracker` 其实就很像使用一个 smart pointer。如果需要引用计数，
 /// 就在外面再套一层 [`Arc`](alloc::sync::Arc) 就好
+///
+/// PhysicalPageNumber 其实是物理地址的指针。
 pub struct FrameTracker(pub(super) PhysicalPageNumber);
 
 impl FrameTracker {
@@ -30,6 +33,23 @@ impl FrameTracker {
         self.0
     }
 }
+
+/// `FrameTracker` 可以 deref 得到对应的 `[u8; PAGE_SIZE]`
+impl core::ops::Deref for FrameTracker {
+    type Target = [u8; PAGE_SIZE];
+    fn deref(&self) -> &Self::Target {
+        self.page_number().deref_kernel()
+    }
+}
+
+/// `FrameTracker` 可以 deref 得到对应的 `[u8; PAGE_SIZE]`
+impl core::ops::DerefMut for FrameTracker {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        self.page_number().deref_kernel()
+    }
+}
+
+
 
 /// 帧在释放时会放回 [`static@FRAME_ALLOCATOR`] 的空闲链表中
 impl Drop for FrameTracker {
