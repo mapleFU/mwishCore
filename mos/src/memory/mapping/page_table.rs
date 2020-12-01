@@ -1,10 +1,15 @@
-use super::page_table_entry::PageTableEntry;
+use super::super::address::*;
+use super::super::frame::FrameTracker;
+use super::page_table_entry::{Flags, PageTableEntry};
+use super::PAGE_SIZE;
 
 /// 存有 512 个页表项的页表
 ///
 /// 注意我们不会使用常规的 Rust 语法来创建 `PageTable`。相反，我们会分配一个物理页，
 /// 其对应了一段物理内存，然后直接把其当做页表进行读写。我们会在操作系统中用一个「指针」
 /// [`PageTableTracker`] 来记录这个页表。
+///
+/// 所以实际上，这个会被当作映射到物理内存上，而不是在虚拟内存中的结构。
 #[repr(C)]
 pub struct PageTable {
     pub entries: [PageTableEntry; PAGE_SIZE / 8],
@@ -35,5 +40,28 @@ impl PageTableTracker {
     /// 获取物理页号
     pub fn page_number(&self) -> PhysicalPageNumber {
         self.0.page_number()
+    }
+}
+
+// PageTableEntry 和 PageTableTracker 都可以 deref 到对应的 PageTable
+// （使用线性映射来访问相应的物理地址）
+
+impl core::ops::Deref for PageTableTracker {
+    type Target = PageTable;
+    fn deref(&self) -> &Self::Target {
+        self.0.address().deref_kernel()
+    }
+}
+
+impl core::ops::DerefMut for PageTableTracker {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        self.0.address().deref_kernel()
+    }
+}
+
+// 因为 PageTableEntry 和具体的 PageTable 之间没有生命周期关联，所以返回 'static 引用方便写代码
+impl PageTableEntry {
+    pub fn get_next_table(&self) -> &'static mut PageTable {
+        self.address().deref_kernel()
     }
 }

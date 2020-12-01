@@ -1,3 +1,24 @@
+//! page_table_entry 存放了系统的页表项，它的布局是按照 sv39 布局的。Flag 也是按照 sv39 来做的。
+//!
+//! 页表项 [`PageTableEntry`]
+//!
+//! # RISC-V 64 中的页表项结构
+//! 每个页表项长度为 64 位，每个页面大小是 4KB，即每个页面能存下 2^9=512 个页表项。
+//! 每一个页表存放 512 个页表项，说明每一级页表使用 9 位来标记 VPN。
+//!
+//! # RISC-V 64 两种页表组织方式：Sv39 和 Sv48
+//! 64 位能够表示的空间大小太大了，因此现有的 64 位硬件实际上都不会支持 64 位的地址空间。
+//!
+//! RISC-V 64 现有两种地址长度：39 位和 48 位，其中 Sv39 的虚拟地址就包括三级页表和页内偏移。
+//! `3 * 9 + 12 = 39`
+//!
+//! 我们使用 Sv39，Sv48 同理，只是它具有四级页表。
+
+use super::super::address::*;
+use super::PAGE_SIZE;
+use bit_field::BitField;
+use bitflags::*;
+
 /// Sv39 结构的页表项
 #[derive(Copy, Clone, Default)]
 pub struct PageTableEntry(usize);
@@ -25,6 +46,7 @@ impl PageTableEntry {
                 .set_bits(FLAG_RANGE, (self.flags() | Flags::VALID).bits() as usize)
                 .set_bits(PAGE_NUMBER_RANGE, ppn.into());
         } else {
+            // `-` in bit flag means set difference.
             self.0
                 .set_bits(FLAG_RANGE, (self.flags() - Flags::VALID).bits() as usize)
                 .set_bits(PAGE_NUMBER_RANGE, 0);

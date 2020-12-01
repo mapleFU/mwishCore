@@ -2,6 +2,7 @@ mod address;
 pub mod config;
 pub mod frame;
 pub mod heap;
+mod mapping;
 pub mod range;
 
 pub use config::*;
