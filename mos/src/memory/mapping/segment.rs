@@ -1,6 +1,6 @@
 use super::super::address::*;
 use super::super::range::Range;
-use super::page_table_entry::{Flags, PageTableEntry};
+use super::page_table_entry::Flags;
 
 /// 映射的类型
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]

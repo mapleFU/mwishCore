@@ -52,6 +52,10 @@ impl PageTableEntry {
                 .set_bits(PAGE_NUMBER_RANGE, 0);
         }
     }
+    /// 清除
+    pub fn clear(&mut self) {
+        self.0 = 0;
+    }
     /// 获取页号
     pub fn page_number(&self) -> PhysicalPageNumber {
         PhysicalPageNumber::from(self.0.get_bits(10..54))
@@ -103,3 +107,25 @@ bitflags! {
         const DIRTY =       1 << 7;
     }
 }
+
+macro_rules! implement_flags {
+    ($field: ident, $name: ident, $quote: literal) => {
+        impl Flags {
+            #[doc = "返回 `Flags::"]
+            #[doc = $quote]
+            #[doc = "` 或 `Flags::empty()`"]
+            pub fn $name(value: bool) -> Flags {
+                if value {
+                    Flags::$field
+                } else {
+                    Flags::empty()
+                }
+            }
+        }
+    };
+}
+
+implement_flags! {USER, user, "USER"}
+implement_flags! {READABLE, readable, "READABLE"}
+implement_flags! {WRITABLE, writable, "WRITABLE"}
+implement_flags! {EXECUTABLE, executable, "EXECUTABLE"}
