@@ -13,9 +13,9 @@ pub const PAGE_SIZE: usize = 4096;
  */
 
 /// 可以访问的内存区域起始地址
-pub const MEMORY_START_ADDRESS: PhysicalAddress = PhysicalAddress(0x8000_0000);
+pub const MEMORY_START_ADDRESS: PhysicalAddress = PhysicalAddress(0x8_000_0000);
 /// 可以访问的内存区域结束地址
-pub const MEMORY_END_ADDRESS: PhysicalAddress = PhysicalAddress(0x8800_0000);
+pub const MEMORY_END_ADDRESS: PhysicalAddress = PhysicalAddress(0x8_800_0000);
 
 lazy_static! {
     /// 内核代码结束的地址，即可以用来分配的内存起始地址

@@ -54,6 +54,11 @@ pub extern "C" fn rust_main() -> ! {
     interrupt::init();
     memory::init();
 
+    println!("before mapping");
+
+    let remap = memory::mapping::MemorySet::new_kernel().unwrap();
+    remap.activate();
+
     // 动态内存分配测试
     use alloc::boxed::Box;
     use alloc::vec::Vec;

@@ -60,6 +60,7 @@ impl MemorySet {
                 flags: Flags::READABLE | Flags::WRITABLE,
             },
             // 剩余内存空间，rw-
+            // 卧槽，这个地方用户也全部 Linear 映射了啊
             Segment {
                 map_type: MapType::Linear,
                 range: Range::from(*KERNEL_END_ADDRESS..VirtualAddress::from(MEMORY_END_ADDRESS)),
