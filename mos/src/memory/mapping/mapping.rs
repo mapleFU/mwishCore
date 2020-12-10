@@ -18,6 +18,7 @@ use alloc::{collections::VecDeque, vec, vec::Vec};
 use core::cmp::min;
 
 /// 某个线程的内存映射关系
+/// vec, VecDeque 的空间在 .bss 上，Page 申请的在 user space 上，所以用 Vec, VecDeque 也没问题。
 pub struct Mapping {
     /// 保存所有使用到的页表
     page_tables: Vec<PageTableTracker>,
@@ -112,6 +113,7 @@ impl Mapping {
             // 线性映射，直接对虚拟地址进行转换
             MapType::Linear => {
                 for vpn in segment.page_range().iter() {
+                    // vpn, 线性映射的 ppn, 对应的 flag
                     self.map_one(vpn, Some(vpn.into()), segment.flags)?;
                 }
                 // 拷贝数据

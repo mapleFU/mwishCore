@@ -18,8 +18,6 @@ SECTIONS
     /* start 符号表示全部的开始位置 */
     kernel_start = .;
 
-    text_start = .;
-
     /* 加入对齐 */
     . = ALIGN(4K);
     text_start = .;
