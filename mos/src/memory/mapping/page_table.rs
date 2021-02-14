@@ -1,6 +1,6 @@
 use super::super::address::*;
 use super::super::frame::FrameTracker;
-use super::page_table_entry::{Flags, PageTableEntry};
+use super::page_table_entry::PageTableEntry;
 use super::PAGE_SIZE;
 
 /// 存有 512 个页表项的页表

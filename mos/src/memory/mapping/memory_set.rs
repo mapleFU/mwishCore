@@ -3,7 +3,6 @@
 
 use super::page_table_entry::Flags;
 use super::MapType;
-use super::*;
 use crate::memory::address::VirtualAddress;
 use crate::memory::address::VirtualPageNumber;
 use crate::memory::mapping::mapping::Mapping;

@@ -25,6 +25,8 @@
 //!   而语言要求我们同时实现一个错误回调，这里我们直接 panic
 #![feature(alloc_error_handler)]
 
+#![feature(drain_filter)]
+
 #[macro_use]
 mod console;
 mod panic;
@@ -42,6 +44,8 @@ extern crate bitflags;
 mod interrupt;
 mod memory;
 
+mod process;
+
 // 汇编编写的程序入口，具体见该文件
 global_asm!(include_str!("entry.asm"));
 
@@ -58,6 +62,8 @@ pub extern "C" fn rust_main() -> ! {
 
     let remap = memory::mapping::MemorySet::new_kernel().unwrap();
     remap.activate();
+
+    println!("kernel remapped");
 
     // 动态内存分配测试
     use alloc::boxed::Box;
