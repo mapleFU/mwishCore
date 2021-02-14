@@ -6,6 +6,11 @@ pub const KERNEL_HEAP_SIZE: usize = 0x80_0000;
 /// 页 / 帧大小，必须是 2^n
 pub const PAGE_SIZE: usize = 4096;
 
+/// MMIO 设备段内存区域起始地址
+pub const DEVICE_START_ADDRESS: PhysicalAddress = PhysicalAddress(0x1000_0000);
+/// MMIO 设备段内存区域结束地址
+pub const DEVICE_END_ADDRESS: PhysicalAddress = PhysicalAddress(0x1001_0000);
+
 // 下列两个地址表示，0x8000_0000 是 qemu 起始地址
 
 /**

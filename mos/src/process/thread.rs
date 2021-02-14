@@ -74,6 +74,9 @@ impl Thread {
         let stack = process.alloc_page_range(STACK_SIZE, Flags::READABLE | Flags::WRITABLE)?;
 
         // 构建线程的 Context
+        // 第一个参数是 stack_top, stack 参数来自自己 alloc 的空间
+        // entry_point 是 fn 的地址
+        // 这个函数里面会设置一些权限什么的
         let context = Context::new(stack.end.into(), entry_point, arguments, process.is_user);
 
         // 打包成线程
