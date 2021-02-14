@@ -21,6 +21,7 @@ pub struct MemorySet {
     pub segments: Vec<Segment>,
 }
 
+#[allow(unused)]
 impl MemorySet {
     /// 创建内核重映射
     pub fn new_kernel() -> MemoryResult<MemorySet> {

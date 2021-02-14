@@ -27,6 +27,8 @@
 
 #![feature(drain_filter)]
 
+use crate::process::processor::PROCESSOR;
+
 #[macro_use]
 mod console;
 mod panic;
@@ -99,5 +101,12 @@ pub extern "C" fn rust_main() -> ! {
         println!("{} and {}", frame_0.address(), frame_1.address());
     }
 
-    panic!()
+    extern "C" {
+        fn __restore(context: usize);
+    }
+    // 获取第一个线程的 Context，具体原理后面讲解
+    let context = PROCESSOR.lock().prepare_next_thread();
+    // 启动第一个线程
+    unsafe { __restore(context as usize) };
+    unreachable!()
 }

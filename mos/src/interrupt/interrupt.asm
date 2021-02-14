@@ -64,6 +64,10 @@ __interrupt:
 # 离开中断
 # 从 Context 中恢复所有寄存器，并跳转至 Context 中 sepc 的位置
 __restore:
+    # 从 a0 中读取 sp
+    # 思考：a0 是在哪里被赋值的？（有两种情况）
+    # 答案: 要么是原先的 sp, 要么是直接赋予的 a0.
+    mv      sp, a0
     # 恢复 CSR
     LOAD    s1, 32
     LOAD    s2, 33
