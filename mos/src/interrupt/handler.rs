@@ -27,6 +27,7 @@ pub fn init() {
 #[no_mangle]
 pub fn handle_interrupt(context: &mut Context, scause: Scause, stval: usize) -> *mut Context {
     println!("{:x?}", scause.cause());
+    println!("handle_interrupt is called");
     // 首先检查线程是否已经结束（内核线程会自己设置标记来结束自己）
     {
         let mut processor = PROCESSOR.lock();

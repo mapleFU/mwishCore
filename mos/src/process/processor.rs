@@ -48,6 +48,7 @@ pub struct Processor {
 impl Processor {
     /// 获取一个当前线程的 `Arc` 引用
     pub fn current_thread(&self) -> Arc<Thread> {
+        println!("current_thread is called");
         self.current_thread.as_ref().unwrap().clone()
     }
 
@@ -86,11 +87,13 @@ impl Processor {
 
     /// 保存当前线程的 `Context`
     pub fn park_current_thread(&mut self, context: &Context) {
+        println!("part_current_thread is called");
         self.current_thread().park(*context);
     }
 
     /// 令当前线程进入休眠
     pub fn sleep_current_thread(&mut self) {
+        println!("sleep current thread is called");
         // 从 current_thread 中取出
         let current_thread = self.current_thread();
         // 记为 sleeping
@@ -102,6 +105,7 @@ impl Processor {
 
     /// 终止当前的线程
     pub fn kill_current_thread(&mut self) {
+        println!("kill current thread is called");
         // 从调度器中移除
         let thread = self.current_thread.take().unwrap();
         self.scheduler.remove_thread(&thread);

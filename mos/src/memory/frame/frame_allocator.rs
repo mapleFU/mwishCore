@@ -34,10 +34,14 @@ impl<T: Allocator> FrameAllocator<T> {
 
     /// 分配帧，如果没有剩余则返回 `Err`
     pub fn alloc(&mut self) -> MemoryResult<FrameTracker> {
-        self.allocator
+        let resp = self.allocator
             .alloc()
             .ok_or("no available frame to allocate")
-            .map(|offset| FrameTracker(self.start_ppn + offset))
+            .map(|offset| FrameTracker(self.start_ppn + offset));
+        if resp.is_err() {
+            println!("no space, maybe");
+        }
+        resp
     }
 
     /// 将被释放的帧添加到空闲列表的尾部
