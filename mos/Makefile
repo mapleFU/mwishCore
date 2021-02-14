@@ -33,11 +33,13 @@ clean:
 
 # 运行 QEMU
 qemu: build
-	@qemu-system-riscv64 \
-			-machine virt \
-		  	-nographic \
-			-bios default \
-			-device loader,file=$(BIN_FILE),addr=0x80200000
+    @qemu-system-riscv64 \
+            -machine virt \
+            -nographic \
+            -bios default \
+            -device loader,file=$(BIN_FILE),addr=0x80200000 \
+            -drive file=$(TEST_IMG),format=raw,id=sfs \      # 模拟存储设备
+            -device virtio-blk-device,drive=sfs              # 以 virtio Block Device 的形式挂载到 virtio 总线上
 
 # 一键运行
 run: build qemu

@@ -27,6 +27,7 @@
 
 #![feature(drain_filter)]
 
+use crate::memory::PhysicalAddress;
 use alloc::sync::Arc;
 use process::thread::Thread;
 use process::process::Process;
@@ -50,6 +51,7 @@ mod interrupt;
 mod memory;
 
 mod process;
+mod drivers;
 
 // 汇编编写的程序入口，具体见该文件
 global_asm!(include_str!("entry.asm"));
@@ -58,9 +60,10 @@ global_asm!(include_str!("entry.asm"));
 ///
 /// 在 `_start` 为我们进行了一系列准备之后，这是第一个被调用的 Rust 函数
 #[no_mangle]
-pub extern "C" fn rust_main() -> ! {
+pub extern "C" fn rust_main(_hart_id: usize, dtb_pa: PhysicalAddress) -> ! {
     memory::init();
     interrupt::init();
+    drivers::init(dtb_pa);
 
     {
         let mut processor = PROCESSOR.lock();
