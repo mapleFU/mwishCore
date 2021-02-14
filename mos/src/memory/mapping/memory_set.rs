@@ -1,6 +1,8 @@
 //! 一个线程中关于内存空间的所有信息 [`MemorySet`]
 //!
 
+use crate::memory::DEVICE_END_ADDRESS;
+use crate::memory::DEVICE_START_ADDRESS;
 use super::page_table_entry::Flags;
 use super::MapType;
 use crate::memory::address::VirtualAddress;
@@ -35,6 +37,12 @@ impl MemorySet {
 
         // 建立字段
         let segments = vec![
+            // DEVICE 段，rw-
+            Segment {
+                map_type: MapType::Linear,
+                range: Range::from(DEVICE_START_ADDRESS..DEVICE_END_ADDRESS),
+                flags: Flags::READABLE | Flags::WRITABLE,
+            },
             // .text 段，r-x
             Segment {
                 map_type: MapType::Linear,

@@ -52,6 +52,7 @@ mod memory;
 
 mod process;
 mod drivers;
+mod fs;
 
 // 汇编编写的程序入口，具体见该文件
 global_asm!(include_str!("entry.asm"));
@@ -64,6 +65,7 @@ pub extern "C" fn rust_main(_hart_id: usize, dtb_pa: PhysicalAddress) -> ! {
     memory::init();
     interrupt::init();
     drivers::init(dtb_pa);
+    fs::init();
 
     {
         let mut processor = PROCESSOR.lock();
