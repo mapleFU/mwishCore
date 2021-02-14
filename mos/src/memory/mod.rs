@@ -3,9 +3,14 @@ pub mod config;
 pub mod frame;
 pub mod heap;
 pub mod mapping;
+#[allow(dead_code)]
 pub mod range;
 
 pub use config::*;
+pub use address::*;
+pub use mapping::MemorySet;
+pub use mapping::Flags;
+pub use mapping::MapType;
 
 /// 一个缩写，模块中一些函数会使用
 pub type MemoryResult<T> = Result<T, &'static str>;

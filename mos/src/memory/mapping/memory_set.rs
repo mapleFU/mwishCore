@@ -3,7 +3,6 @@
 
 use super::page_table_entry::Flags;
 use super::MapType;
-use super::*;
 use crate::memory::address::VirtualAddress;
 use crate::memory::address::VirtualPageNumber;
 use crate::memory::mapping::mapping::Mapping;
@@ -22,6 +21,7 @@ pub struct MemorySet {
     pub segments: Vec<Segment>,
 }
 
+#[allow(unused)]
 impl MemorySet {
     /// 创建内核重映射
     pub fn new_kernel() -> MemoryResult<MemorySet> {

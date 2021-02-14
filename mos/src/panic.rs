@@ -13,7 +13,7 @@ fn panic_handler(info: &PanicInfo) -> ! {
     // 参考：https://misc.flogisoft.com/bash/tip_colors_and_formatting
     //
     // 需要全局开启 feature(panic_info_message) 才可以调用 .message() 函数
-    println!("\x1b[1;31mpanic: '{}'\x1b[0m", info.message().unwrap());
+    println!("\x1b[1;31mpanic: '{}, {}'\x1b[0m", info.message().unwrap(), info.location().unwrap());
     shutdown()
 }
 

@@ -35,8 +35,10 @@ pub fn init() {
     unsafe {
         // 开启 STIE，允许时钟中断
         sie::set_stimer();
-        // 开启 SIE（不是 sie 寄存器），允许内核态被中断打断
-        sstatus::set_sie();
+        // 在 Lab4 Part2 之后，操作系统初始化中不可能存在中断。
+        // 目前在 Context 里面，靠 spie 设置：进入内核关中断，在外层开中断。
+        // // 开启 SIE（不是 sie 寄存器），允许内核态被中断打断
+        // sstatus::set_sie();
     }
     // 设置下一次时钟中断
     set_next_timeout();

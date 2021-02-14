@@ -112,6 +112,7 @@ impl Mapping {
         match segment.map_type {
             // 线性映射，直接对虚拟地址进行转换
             MapType::Linear => {
+                println!("map linear is called");
                 for vpn in segment.page_range().iter() {
                     // vpn, 线性映射的 ppn, 对应的 flag
                     self.map_one(vpn, Some(vpn.into()), segment.flags)?;

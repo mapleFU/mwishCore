@@ -11,6 +11,8 @@ mod context;
 mod handler;
 mod timer;
 
+pub use context::Context;
+
 /// 初始化中断相关的子模块
 ///
 /// - [`handler::init`]
